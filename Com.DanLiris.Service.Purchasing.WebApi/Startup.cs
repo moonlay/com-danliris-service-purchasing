@@ -266,7 +266,8 @@ namespace Com.DanLiris.Service.Purchasing.WebApi
 
                 c.CustomSchemaIds(i => i.FullName);
             });
-            
+
+            // App Insight Telemetry
             services.AddApplicationInsightsTelemetry();
             services.AddApplicationInsightRequestBodyLogging();
         }
@@ -289,6 +290,10 @@ namespace Com.DanLiris.Service.Purchasing.WebApi
                 }
             }
 
+            // App Insight Telemetry
+            app.UseApplicationInsightRequestBodyLogging();
+            app.UseApplicationInsightResponseBodyLogging();
+
             app.UseAuthentication();
             app.UseCors(PURCHASING_POLICITY);
             app.UseMvc();
@@ -303,8 +308,7 @@ namespace Com.DanLiris.Service.Purchasing.WebApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             });
 
-            app.UseApplicationInsightRequestBodyLogging();
-            app.UseApplicationInsightResponseBodyLogging();
+            
 
             JobManager.Initialize(new MasterRegistry(app.ApplicationServices));
         }
