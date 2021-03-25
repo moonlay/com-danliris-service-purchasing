@@ -62,6 +62,7 @@ using Com.DanLiris.Service.Purchasing.Lib.Utilities;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.ApplicationInsights.AspNetCore;
 
 namespace Com.DanLiris.Service.Purchasing.WebApi
 {
@@ -265,6 +266,9 @@ namespace Com.DanLiris.Service.Purchasing.WebApi
 
                 c.CustomSchemaIds(i => i.FullName);
             });
+            
+            services.AddApplicationInsightsTelemetry();
+            services.AddApplicationInsightRequestBodyLogging();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -298,6 +302,9 @@ namespace Com.DanLiris.Service.Purchasing.WebApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             });
+
+            app.UseApplicationInsightRequestBodyLogging();
+            app.UseApplicationInsightResponseBodyLogging();
 
             JobManager.Initialize(new MasterRegistry(app.ApplicationServices));
         }
